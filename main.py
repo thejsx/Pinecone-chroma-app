@@ -140,22 +140,7 @@ if pinecone_checkbox == True and (pinecone_index != None or len(indices) >0):
         doc_store = pinecone_funcs.pinecone_index_build_add(pinecone_index, embeddings, split_text, metadata)
         if doc_store:
             new_query = st.text_input(f'Enter questions for Pinecone index {pinecone_index} or use screenshot tool below',key=st.session_state['key'])
-            col1, col2, col3, col4 = st.columns(4)
-            with col1:
-                box_height = st.text_input('Input screenshot box height', value = 450)
-            with col2:
-                box_width = st.text_input('Input screenshot box width', value=1100)
-            with col3:
-                screen_size = st.selectbox('Input screen monitor size', ['1366x768', '1920x1080', '1536x864', '1440x900', '1280x720', '1600x900', '1280x800', '1280x1024', '1024x768', '768x1024'], index = 1)
-                screen_width = screen_size[:screen_size.index('x')]
-                screen_height = screen_size[screen_size.index('x')+1:]
-            with col4:
-                st.write('')
-                if st.button('Click to screenshot main screen and input text'):
-                    text = screenshot_text.screenshot_text(box_height=int(box_height), box_width=int(box_width), screen_height=int(screen_height), screen_width=int(screen_width))
-                    new_query = text
-            if text is not None:
-                st.write('The query is:', new_query)
+            
             # goes in text_input, second argument to refresh: key=st.session_state['key']
             if new_query:
                 query = new_query
