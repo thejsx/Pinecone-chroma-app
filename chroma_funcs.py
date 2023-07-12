@@ -19,7 +19,7 @@ def add_chroma_docs(persist_directory, split_text, metadata):
 
   client_settings = chromadb.config.Settings(
     chroma_db_impl="duckdb+parquet", 
-    persist_directory = f'.venv\\chroma_indices\\{persist_directory}', 
+    persist_directory = f'./tmp/chroma_indices/{persist_directory}', 
     anonymized_telemetry = False)
   vector_store = Chroma(
     collection_name="langchain", 
@@ -33,13 +33,13 @@ def add_chroma_docs(persist_directory, split_text, metadata):
 def query_chroma(persist_directory, query, num_docs):
   client_settings = chromadb.config.Settings(
     chroma_db_impl="duckdb+parquet", 
-    persist_directory = f'.venv\\chroma_indices\\{persist_directory}', 
+    persist_directory = f'./tmp/chroma_indices/{persist_directory}', 
     anonymized_telemetry = False)
   vector_store = Chroma(
     collection_name="langchain", 
     embedding_function=embeddings, 
     client_settings=client_settings, 
-    persist_directory= f'.venv\\chroma_indices\\{persist_directory}')
+    persist_directory= f'./tmp/chroma_indices/{persist_directory}')
   print(vector_store)
   docs = vector_store.similarity_search(query=query, k=num_docs)
   print(docs)
