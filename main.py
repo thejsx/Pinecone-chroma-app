@@ -9,8 +9,6 @@ import random
 from langchain.docstore.document import Document
 import chroma_funcs
 import shutil
-import screenshot_text
-
 
 # Default values
 add_pdf_docs = False
