@@ -17,7 +17,8 @@ add_pdf_image = False
 pinecone_index = None
 
 query, chroma_query, doc_return, chromadb, pinecone_checkbox, chromadb_checkbox, doc_dir, image_dir, pinecone_index, text, pinecone_newindex_input, pinecone_index_input = None, None, [], None, False, False, None, None, None, None, None, None
-directory = 'C:\\Users\\jrsch\\Documents\Visual Studio Code\\Langchain Pinecone ChromaDB\\.venv\\chroma_indices'
+directory = './tmp/chroma_indices'
+os.makedirs(directory, exist_ok=True)
 folders = [f for f in os.listdir(directory) if os.path.isdir(os.path.join(directory,f))]
 
 with st.sidebar.form(key='new_form'):

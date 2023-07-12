@@ -39,22 +39,20 @@ def extract_ppts(ppts):
 
 
 def image_pdf_convertor(out_list, pdf, output_placeholder, img_num_text):
-    image_path = "C:\\Users\\jrsch\\Desktop\\images"
-    if not os.path.exists(image_path):
-        os.makedirs(image_path)
-    pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+    image_path = "./tmp/images"
+    os.makedirs(image_path, exist_ok=True)
     if output_placeholder:
         output_placeholder.write(f'starting image conversion.. {img_num_text}')
     pages = pdf2image.convert_from_path(pdf, 500)
 
     image_counter = 1
     for page in pages:
-        filename = image_path + "\\page_" + str(image_counter) + ".jpg"
+        filename = os.path.join(image_path, "page_" + str(image_counter) + ".jpg")
         page.save(filename, 'JPEG')
         image_counter = image_counter + 1
 
     for i in range(1, image_counter):
-        filename = image_path + "\\page_" + str(i) + ".jpg"
+        filename = os.path.join(image_path, "page_" + str(i) + ".jpg")
         text = str(pytesseract.image_to_string(Image.open(filename)))
         out_list.append(text)
         os.remove(filename)
@@ -78,6 +76,8 @@ def get_split_pdf_ppt(doc_dir=None, image_dir=None, metadata_divisor="Chunk"):
         for index, pdf in enumerate(pdf_images):
             out_list = image_pdf_convertor(out_list, pdf, output_placeholder, f'{index+1} of {len(pdf_images)}')
         full_text_dict[image_dir.rpartition('//')[2]] = out_list
+    else:
+        return None, None
 
     output_placeholder.text('Beginning text splitting..')
 
