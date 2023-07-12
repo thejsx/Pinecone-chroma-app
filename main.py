@@ -138,7 +138,7 @@ if pinecone_checkbox == True and (pinecone_index != None or len(indices) >0):
         print('The pinecone index is', pinecone_index)
         doc_store = pinecone_funcs.pinecone_index_build_add(pinecone_index, embeddings, split_text, metadata)
         if doc_store:
-            new_query = st.text_input(f'Enter questions for Pinecone index {pinecone_index} or use screenshot tool below',key=st.session_state['key'])
+            new_query = st.text_input(f'Enter questions for Pinecone index {pinecone_index}',key=st.session_state['key'])
             
             # goes in text_input, second argument to refresh: key=st.session_state['key']
             if new_query:
