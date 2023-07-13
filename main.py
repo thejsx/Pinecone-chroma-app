@@ -104,6 +104,8 @@ with st.sidebar.form(key='new_form'):
                 try:
                     chroma_funcs.add_chroma_docs(chroma_index, split_text, metadata)
                     st.sidebar.write(f'Splits of document {uploaded_file.name} successfully added to index {chroma_index}')
+                    if chroma_index not in folders:
+                        folders.append(chroma_index)
                 except Exception as e:
                     st.sidebar.write(f'There was an error loading the docs into the index:\n{e}')
                     
@@ -149,9 +151,10 @@ if pinecone_checkbox == True and (pinecone_index != None or len(indices) >0):
 if chromadb_checkbox == True:
     chroma_index = st.selectbox("Select the folder/index to query", folders)
     if chroma_index:
-        new_query = st.text_input('Enter your query for these documents')
+        new_query = st.text_input('Enter your query for this index', key=st.session_state['key'])
         if new_query:
             query = new_query
+            st.session_state['key'] = 'key' + str(random.randint(0, 1000000))
             doc_return = chroma_funcs.query_chroma(chroma_index, query, num_docs)
 
 cols = st.columns(len(doc_return)+1)
