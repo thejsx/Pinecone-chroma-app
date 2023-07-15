@@ -123,8 +123,7 @@ st.title("App to query your documents")
 num_docs = st.slider('Number of documents splits to retrieve', 1, 5, 1)
 num_tokens = st.number_input('Maximum tokens to use for GPT response', value=200)
 
-if 'key' not in st.session_state:
-        st.session_state['key'] = 'key' + str(random.randint(0, 1000000))
+st.session_state['query'] = False
 
 st.session_state.query_entered = False
 
@@ -140,10 +139,13 @@ if pinecone_checkbox == True and (pinecone_index != None or len(indices) >0):
         print('The pinecone index is', pinecone_index)
         doc_store = pinecone_funcs.pinecone_index_build_add(pinecone_index, embeddings, split_text, metadata)
         if doc_store:
-            new_query = st.text_input(f'Enter questions for Pinecone index {pinecone_index}',key=st.session_state['key'])
+            new_query = st.text_input(f'Enter questions for Pinecone index {pinecone_index}')
+            button_submit = st.button('Submit')
+            if button_submit:
+                st.session_state['query'] = True
             
             # goes in text_input, second argument to refresh: key=st.session_state['key']
-            if new_query:
+            if new_query and st.session_state['query']:
                 query = new_query
                 st.session_state['key'] = 'key' + str(random.randint(0, 1000000))
                 doc_return = pinecone_funcs.pinecone_query_docs(query, doc_store, num_docs)
@@ -151,8 +153,11 @@ if pinecone_checkbox == True and (pinecone_index != None or len(indices) >0):
 if chromadb_checkbox == True:
     chroma_index = st.selectbox("Select the folder/index to query", folders)
     if chroma_index:
-        new_query = st.text_input('Enter your query for this index', key=st.session_state['key'])
-        if new_query:
+        new_query = st.text_input('Enter your query for this index')
+        button_submit = st.button('Submit')
+        if button_submit:
+            st.session_state['query'] = True
+        if new_query and st.session_state['query']:
             query = new_query
             st.session_state['key'] = 'key' + str(random.randint(0, 1000000))
             doc_return = chroma_funcs.query_chroma(chroma_index, query, num_docs)
